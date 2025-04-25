@@ -1,0 +1,23 @@
+{
+	"name": "webm-hero",
+	"version": "0.0.0",
+	"description": "libvpx wasm",
+	"main": "index.js",
+	"scripts": {
+		"build": "npm run build:emscripten",
+		"build:emscripten": "docker run --rm -v $(pwd):/src trzeci/emscripten:1.38.48 ./build.sh",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"libvpx",
+		"wasm"
+	],
+	"author": "",
+	"license": "MIT",
+	"napa": {
+		"libvpx": "webmproject/libvpx#v1.7.0"
+	},
+	"devDependencies": {
+		"napa": "^3.0.0"
+	}
+}
