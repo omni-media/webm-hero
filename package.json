@@ -12,7 +12,7 @@
 		"libvpx",
 		"wasm"
 	],
-	"author": "",
+	"author": "Przemysław Gałęzki",
 	"license": "MIT",
 	"napa": {
 		"libvpx": "webmproject/libvpx#v1.7.0"
