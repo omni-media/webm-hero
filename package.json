@@ -2,10 +2,20 @@
 	"name": "webm-hero",
 	"version": "0.0.0",
 	"description": "libvpx wasm",
-	"main": "index.js",
+	"main": "x/index.js",
+	"type": "module",
 	"scripts": {
-		"build": "npm run build:emscripten",
+		"build": "rm -rf x && run-s build-code build-ssg links copy-emscripten-build",
+		"build-code": "turtle build --out=x",
+		"build-ssg": "turtle ssg --in=s,x,dist --out=x",
 		"build:emscripten": "docker run --rm -v $(pwd):/src trzeci/emscripten:1.38.48 ./build.sh",
+		"copy-emscripten-build": "cp -r dist x/",
+		"start": "run-p start-http start-turtle",
+		"start-turtle": "turtle watch --in=s,x --out=x -v",
+		"start-http": "http-server x",
+		"links": "run-s links-s links-assets",
+		"links-s": "ln -s \"$(realpath s)\" x/s",
+		"links-assets": "ln -s \"$(realpath assets)\" x/assets",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [
@@ -18,6 +28,13 @@
 		"libvpx": "webmproject/libvpx#v1.7.0"
 	},
 	"devDependencies": {
-		"napa": "^3.0.0"
+		"@benev/turtle": "^0.6.9",
+		"http-server": "^14.1.1",
+		"napa": "^3.0.0",
+		"npm-run-all": "^4.1.5",
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"web-demuxer": "^2.3.3"
 	}
 }

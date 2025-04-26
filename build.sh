@@ -17,7 +17,7 @@ test -n "$SKIP_LIBVPX" || (
     mkdir build-vpx
     cd build-vpx
     emconfigure ../node_modules/libvpx/configure \
-    --target=generic-gnu
+      --target=generic-gnu
     emmake make
 )
 echo "============================================="
@@ -25,28 +25,25 @@ echo "Compiling libvpx done"
 echo "============================================="
 
 echo "============================================="
-echo "Compiling wasm bindings"
+echo "Compiling wasm bindings (with wrapper)"
 echo "============================================="
 (
-   # Compile C/C++ code
-    emcc \
-    ${OPTIMIZE} \
-    --bind \
-    -s STRICT=1 \
-    -s ALLOW_MEMORY_GROWTH=1 \
-    -s ASSERTIONS=0 \
-    -s MALLOC=emmalloc \
-    -s MODULARIZE=1 \
-    -s EXPORT_ES6=1 \
-    -o ./my-module.js \
-    -I ./node_modules/libvpx \
-    s/my-module.cpp \
-    build-vpx/libvpx.a
+	emcc \
+		${OPTIMIZE} \
+		-s STRICT=1 \
+		-s ALLOW_MEMORY_GROWTH=1 \
+		-s ASSERTIONS=0 \
+		-s MALLOC=emmalloc \
+		-s MODULARIZE=1 \
+		-s EXPORT_ES6=1 \
+		-s EXPORTED_FUNCTIONS='["_decoder_create","_decoder_decode","_decoder_get_frame","_decoder_destroy", "_malloc", "_free"]' \
+		-I ./node_modules/libvpx \
+		./s/decoder/vpx-decoder.c \
+		build-vpx/libvpx.a \
+		-o my-module.js
 
-    # Create output folder
-    mkdir -p dist
-    # Move artifacts
-    mv my-module.{js,wasm} dist
+	mkdir -p dist
+	mv my-module.{js,wasm} dist
 )
 echo "============================================="
 echo "Compiling wasm bindings done"
