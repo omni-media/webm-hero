@@ -21,7 +21,6 @@ export class VpxFrame {
 		// Width and height: use correct fields
 		this.width = HEAPU32[base + 6]
 		this.height = HEAPU32[base + 7]
-		console.log(this.width, this.height, "Width x Height")
 
 		// Planes (offset +48 bytes)
 		const planesBase = (framePtr + 48) >> 2
