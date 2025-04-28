@@ -35,6 +35,7 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
+		"@benev/slate": "^0.3.0",
 		"web-demuxer": "^2.3.3"
 	}
 }
