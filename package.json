@@ -8,7 +8,7 @@
 		"build": "run-s _clean _vpx _tscode _ssg _links",
 		"start": "run-p _http _turtlewatch",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"_clean": "rm -rf x build && mkdir -p build",
+		"_clean": "rm -rf x",
 		"_tscode": "turtle build --out=x",
 		"_ssg": "turtle ssg --in=s,x,dist --out=x",
 		"_links": "ln -s \"$(realpath s)\" x/s",
