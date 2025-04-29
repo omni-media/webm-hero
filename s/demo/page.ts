@@ -53,6 +53,7 @@ export class DemoPage extends ShadowElement {
 	}
 
 	render() {
+		const frames = this.player.mediainfo?.streams.find(v => v.codec_type_string === "video")?.nb_frames ?? 0
 		return html`
 			<div class=demo>
 				<h1>webm-hero</h1>
@@ -60,7 +61,7 @@ export class DemoPage extends ShadowElement {
 				<input @change=${this.onFileInputChange} type="file" class="file-input" accept="image/*, video/webm, .mp3">
 				${this.player.canvas}
 				<span>current frame: ${this.player.currentFrameNumber}</span>
-				<span>amount of frames: ${this.player.mediainfo?.streams.find(v => v.codec_type_string === "video")?.nb_frames ?? 0}</span>
+				<span>amount of frames: ${frames}</span>
 				<div>
 					<button @click=${() => this.player.play()}>Play</button>
 					<button @click=${() => this.player.pause()}>Pause</button>
@@ -68,7 +69,7 @@ export class DemoPage extends ShadowElement {
 				<div>
 					<label>seek to frame:</label>
 					<div>
-						<input min="0" value="0" type="number" class="seekto">
+						<input min="0" max=${frames} value="0" type="number" class="seekto">
 						<button @click=${this.seek} class="seek-btn">seek</button>
 					</div>
 				</div>
