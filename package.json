@@ -8,7 +8,7 @@
 		"build": "run-s _clean _vpx build:web",
 		"build:web": "run-s _tscode _ssg",
 		"test": "node x/tests.test.js --verbose",
-		"dev": "run-p _http _turtlewatch _testw",
+		"start": "run-p _http _turtlewatch _testw",
 		"_clean": "rm -rf x",
 		"_vpx": "./vpx/execute.sh",
 		"_tscode": "turtle build --out=x",

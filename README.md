@@ -12,7 +12,7 @@
 - `npm i && npm run build` -- fully rebuild everything into `x/`
 - `npm run build:web` -- web-only partial rebuild (ts, static site)
 - `npm test` -- run test suite
-- `npm run dev` -- run http and watch routines
+- `npm start` -- run http and watch routines
 
 <br/>
 
