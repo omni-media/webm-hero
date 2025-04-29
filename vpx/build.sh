@@ -11,16 +11,14 @@ export LDFLAGS="${OPTIMIZE} -msimd128"
 
 eval $@
 
-echo "============================================="
-echo "Compiling libvpx"
-echo "============================================="
+echo "=== Compiling libvpx === "
 
 test -n "$SKIP_LIBVPX" || (
-	rm -rf build-vpx || true
-	mkdir build-vpx
-	cd build-vpx
+	rm -rf build/vpx || true
+	mkdir build/vpx
+	cd build/vpx
 
-	emconfigure ../node_modules/libvpx/configure \
+	emconfigure /deps/libvpx/configure \
 		--target=generic-gnu \
 		--disable-examples \
 		--disable-tools \
@@ -31,13 +29,7 @@ test -n "$SKIP_LIBVPX" || (
 	emranlib libvpx.a
 )
 
-echo "============================================="
-echo "Compiling libvpx done"
-echo "============================================="
-
-echo "============================================="
-echo "Compiling wasm bindings (with wrapper)"
-echo "============================================="
+echo "=== Compiling wasm bindings ==="
 
 (
 	emcc \
@@ -50,15 +42,12 @@ echo "============================================="
 		-s MODULARIZE=1 \
 		-s EXPORT_ES6=1 \
 		-s EXPORTED_FUNCTIONS='["_decoder_create","_decoder_decode","_decoder_get_frame","_decoder_destroy","_malloc","_free"]' \
-		-I ./node_modules/libvpx \
+		-I /deps/libvpx \
 		./s/decoder/vpx-decoder.c \
-		build-vpx/libvpx.a \
+		build/vpx/libvpx.a \
 		-o my-module.js
 
-	mkdir -p dist
-	mv my-module.{js,wasm} dist
+	mkdir -p build/dist
+	mv my-module.{js,wasm} build/dist
 )
 
-echo "============================================="
-echo "Compiling wasm bindings done"
-echo "============================================="
