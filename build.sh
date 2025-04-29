@@ -3,11 +3,11 @@
 set -e
 
 export OPTIMIZE="-Os"
-export LDFLAGS="${OPTIMIZE}"
-export CFLAGS="${OPTIMIZE}"
-export CXXFLAGS="${OPTIMIZE}"
 export AR=emar
 export RANLIB=emranlib
+export CFLAGS="${OPTIMIZE} -msimd128 -flto -O3 -ftree-vectorize -fvectorize -fslp-vectorize"
+export CXXFLAGS="${OPTIMIZE} -msimd128 -O3 -ftree-vectorize -fvectorize -fslp-vectorize"
+export LDFLAGS="${OPTIMIZE} -msimd128"
 
 eval $@
 
@@ -42,6 +42,7 @@ echo "============================================="
 (
 	emcc \
 		${OPTIMIZE} \
+		-msimd128 \
 		-s STRICT=1 \
 		-s ALLOW_MEMORY_GROWTH=1 \
 		-s ASSERTIONS=0 \
