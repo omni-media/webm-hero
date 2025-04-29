@@ -5,18 +5,21 @@
 	"main": "x/index.js",
 	"type": "module",
 	"scripts": {
-		"build": "rm -rf x && run-s build-code build-ssg links copy-emscripten-build",
+		"build": "rm -rf x && run-s build-code build-ssg links copy-emscripten-build copy-demuxer-stuff",
 		"build-code": "turtle build --out=x",
 		"build-ssg": "turtle ssg --in=s,x,dist --out=x",
 		"build:emscripten": "docker run --rm -v $(pwd):/src emscripten/emsdk:3.1.6 ./build.sh",
 		"copy-emscripten-build": "cp -r dist x/",
-		"start": "run-p start-http start-turtle",
+		"copy-demuxer-stuff": "cp -r node_modules/web-demuxer/dist/wasm-files/ x/",
+		"start": "run-p start-http start-turtle test-watch",
 		"start-turtle": "turtle watch --in=s,x --out=x -v",
 		"start-http": "http-server x",
 		"links": "run-s links-s links-assets",
 		"links-s": "ln -s \"$(realpath s)\" x/s",
 		"links-assets": "ln -s \"$(realpath assets)\" x/assets",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "node x/tests.test.js --verbose",
+		"test-watch": "node --watch x/tests.test.js --verbose",
+		"test-debug": "node inspect x/tests.test.js"
 	},
 	"keywords": [
 		"libvpx",
@@ -29,6 +32,7 @@
 	},
 	"devDependencies": {
 		"@benev/turtle": "^0.6.9",
+		"@e280/science": "^0.0.0",
 		"http-server": "^14.1.1",
 		"napa": "^3.0.0",
 		"npm-run-all": "^4.1.5",
@@ -36,6 +40,8 @@
 	},
 	"dependencies": {
 		"@benev/slate": "^0.3.0",
+		"@e280/comrade": "^0.0.0-12",
+		"@e280/stz": "^0.0.0-5",
 		"web-demuxer": "^2.3.3"
 	}
 }

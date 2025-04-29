@@ -1,6 +1,4 @@
-import type {WebDemuxer as Demuxer, WebMediaInfo} from "web-demuxer"
-//@ts-ignore
-import {WebDemuxer} from "web-demuxer/dist/web-demuxer.js"
+import {WebDemuxer, WebMediaInfo} from "web-demuxer"
 
 //@ts-ignore
 import Module from '../../dist/my-module.js'
@@ -11,7 +9,7 @@ import {getFrame} from "./parts/get-frame.js"
 export class VpxDecoder {
 	#module: any
 	protected info: WebMediaInfo | null = null
-	protected demuxer: Demuxer = new WebDemuxer({wasmLoaderPath: import.meta.resolve("web-demuxer/dist/wasm-files/ffmpeg.js")})
+	protected demuxer = new WebDemuxer({wasmLoaderPath: "wasm-files/ffmpeg.js"})
 
 	protected currentFrame = 0
 
