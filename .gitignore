@@ -1,4 +1,5 @@
 /build-vpx
 /dist
 /node_modules
+/temp
 /x
