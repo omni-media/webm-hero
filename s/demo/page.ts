@@ -1,5 +1,5 @@
-import {ShadowElement, html, css, mixin} from "@benev/slate"
 
+import {ShadowElement, html, css, mixin, cssReset} from "@benev/slate"
 import {Player} from "../decoder/parts/player.js"
 
 @mixin.reactive()
@@ -15,11 +15,9 @@ export class DemoPage extends ShadowElement {
 
 	static get styles() {
 		return css`
-			h1 {
-				font-family: sans-serif;
-			}
+			${cssReset}
 
-			.demo {
+			:host {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -55,23 +53,20 @@ export class DemoPage extends ShadowElement {
 	render() {
 		const frames = this.player.mediainfo?.streams.find(v => v.codec_type_string === "video")?.nb_frames ?? 0
 		return html`
-			<div class=demo>
-				<h1>webm-hero</h1>
-				<label>Only vp8 compatible containers (webm, mkv ...)</label>
-				<input @change=${this.onFileInputChange} type="file" class="file-input" accept="image/*, video/webm, .mp3">
-				${this.player.canvas}
-				<span>current frame: ${this.player.currentFrameNumber}</span>
-				<span>amount of frames: ${frames}</span>
+			<label>Only vp8 compatible containers (webm, mkv ...)</label>
+			<input @change=${this.onFileInputChange} type="file" class="file-input" accept="image/*, video/webm, .mp3">
+			${this.player.canvas}
+			<span>current frame: ${this.player.currentFrameNumber}</span>
+			<span>amount of frames: ${frames}</span>
+			<div>
+				<button @click=${() => this.player.play()}>Play</button>
+				<button @click=${() => this.player.pause()}>Pause</button>
+			</div>
+			<div>
+				<label>seek to frame:</label>
 				<div>
-					<button @click=${() => this.player.play()}>Play</button>
-					<button @click=${() => this.player.pause()}>Pause</button>
-				</div>
-				<div>
-					<label>seek to frame:</label>
-					<div>
-						<input min="0" max=${frames} value="0" type="number" class="seekto">
-						<button @click=${this.seek} class="seek-btn">seek</button>
-					</div>
+					<input min="0" max=${frames} value="0" type="number" class="seekto">
+					<button @click=${this.seek} class="seek-btn">seek</button>
 				</div>
 			</div>
 		`
