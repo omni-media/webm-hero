@@ -3,7 +3,7 @@ import type {WebDemuxer as Demuxer, WebMediaInfo} from "web-demuxer"
 import {WebDemuxer} from "web-demuxer/dist/web-demuxer.js"
 
 //@ts-ignore
-import Module from '../../dist/my-module.js'
+import Module from '../vpx/vpx.js'
 import {VpxFrame} from "./parts/vpx-frame.js"
 import {getFrame} from "./parts/get-frame.js"
 
