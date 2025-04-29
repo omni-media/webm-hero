@@ -1,4 +1,7 @@
 import {VpxDecoder} from "../vpx-decoder.js"
+import {FpsCounter} from "../utils/fps-counter.js"
+
+const fps = new FpsCounter()
 
 export class Player extends VpxDecoder {
 	canvas = document.createElement("canvas")
@@ -15,6 +18,8 @@ export class Player extends VpxDecoder {
 	async play() {
 		if(this.demuxer.source && this.info && !this.#playing) {
 			this.#playing = true
+			fps.start()
+
 			const videoInfo = this.info.streams.find(stream => stream.codec_type_string === "video")
 			const framerate = this.parseFramerate(videoInfo?.avg_frame_rate!)
 			const start = this.currentFrame * (1 / framerate)
@@ -22,6 +27,9 @@ export class Player extends VpxDecoder {
 
 			while(true) {
 				const {done, value} = await reader.read()
+
+				fps.tick()
+
 				if(value) {
 					if(start <= value.timestamp) {
 						const frameNumber = Math.round(value.timestamp * framerate)
