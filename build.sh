@@ -6,20 +6,31 @@ export OPTIMIZE="-Os"
 export LDFLAGS="${OPTIMIZE}"
 export CFLAGS="${OPTIMIZE}"
 export CXXFLAGS="${OPTIMIZE}"
+export AR=emar
+export RANLIB=emranlib
 
 eval $@
 
 echo "============================================="
 echo "Compiling libvpx"
 echo "============================================="
+
 test -n "$SKIP_LIBVPX" || (
-    rm -rf build-vpx || true
-    mkdir build-vpx
-    cd build-vpx
-    emconfigure ../node_modules/libvpx/configure \
-      --target=generic-gnu
-    emmake make
+	rm -rf build-vpx || true
+	mkdir build-vpx
+	cd build-vpx
+
+	emconfigure ../node_modules/libvpx/configure \
+		--target=generic-gnu \
+		--disable-examples \
+		--disable-tools \
+		--disable-docs \
+		--disable-unit-tests
+
+	emmake make -j$(nproc) --keep-going
+	emranlib libvpx.a
 )
+
 echo "============================================="
 echo "Compiling libvpx done"
 echo "============================================="
@@ -27,6 +38,7 @@ echo "============================================="
 echo "============================================="
 echo "Compiling wasm bindings (with wrapper)"
 echo "============================================="
+
 (
 	emcc \
 		${OPTIMIZE} \
@@ -36,7 +48,7 @@ echo "============================================="
 		-s MALLOC=emmalloc \
 		-s MODULARIZE=1 \
 		-s EXPORT_ES6=1 \
-		-s EXPORTED_FUNCTIONS='["_decoder_create","_decoder_decode","_decoder_get_frame","_decoder_destroy", "_malloc", "_free"]' \
+		-s EXPORTED_FUNCTIONS='["_decoder_create","_decoder_decode","_decoder_get_frame","_decoder_destroy","_malloc","_free"]' \
 		-I ./node_modules/libvpx \
 		./s/decoder/vpx-decoder.c \
 		build-vpx/libvpx.a \
@@ -45,6 +57,7 @@ echo "============================================="
 	mkdir -p dist
 	mv my-module.{js,wasm} dist
 )
+
 echo "============================================="
 echo "Compiling wasm bindings done"
 echo "============================================="

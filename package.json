@@ -8,7 +8,7 @@
 		"build": "rm -rf x && run-s build-code build-ssg links copy-emscripten-build",
 		"build-code": "turtle build --out=x",
 		"build-ssg": "turtle ssg --in=s,x,dist --out=x",
-		"build:emscripten": "docker run --rm -v $(pwd):/src trzeci/emscripten:1.38.48 ./build.sh",
+		"build:emscripten": "docker run --rm -v $(pwd):/src emscripten/emsdk:2.0.26 ./build.sh",
 		"copy-emscripten-build": "cp -r dist x/",
 		"start": "run-p start-http start-turtle",
 		"start-turtle": "turtle watch --in=s,x --out=x -v",
