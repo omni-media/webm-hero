@@ -1,4 +1,4 @@
-build-vpx
-dist
-node_modules
-x
+/build-vpx
+/dist
+/node_modules
+/x
